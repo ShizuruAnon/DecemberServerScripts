@@ -1,0 +1,55 @@
+{
+    "uname": "bkt",
+    "ssh-port": 10032,
+    "url-rand-len": 64,
+    "balancer-server-url": "https://balancer.toradora-xmas-stream.com",
+    "master-server-url": "yue.toradora-xmas-stream.com",
+    "slave-server-urls": ["shizuru.toradora-xmas-stream.com"],
+    "video-extentions" : {
+        ".mp4": {
+            "convert": false,
+            "converted_ext": null
+            },
+        ".webm": {
+            "convert": false,
+            "converted_ext": null
+            },
+        ".m4v": {
+            "convert": true,
+            "converted_ext": ".mp4"
+        }
+    },
+    
+    "public-dirs" : {
+        "public-videos": "public_videos",
+        "randomized-videos": "r"
+    },
+    "private-dirs" : {
+        "private-videos": "private_videos",
+        "logs": "logs",
+        "config": "config"
+    },
+    "file-paths": {
+        "video-list-save": {
+            "fn": "video-list-save.pickle",
+            "dir": "config"
+        },
+        "rsync-log": {
+            "fn": "rsync.log",
+            "dir": "logs"
+        },
+        "google-auth-token":  {
+            "fn": "google_auth_token.pickle",
+            "dir": "config"
+        },
+        "google-api-credentials": {
+            "fn": "google_api_credentials.json",
+            "dir": "config"
+        }
+    },
+    "google" : {
+        "scopes": ["https://www.googleapis.com/auth/drive"],
+        "spreadsheet_id": "1N7HLPLQ_u9dT3PRZGCHbkY-BcrDnQtdTTap7wpjFPzw",
+        "spreadsheet_range": "Automatic (do not edit)!A:Z"
+    }
+}
