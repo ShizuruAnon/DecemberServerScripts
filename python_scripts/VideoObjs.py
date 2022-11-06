@@ -102,7 +102,8 @@ class VideoInfo:
             os.symlink(self.orig_path, self.path)
     
     def get_sheet_array(self):
-        return [self.orig_dir, self.orig_fn, self.valid_ext, self.balancer_url] + self.individual_urls
+        return [str(self.valid_ext)[0], self.orig_dir, self.orig_fn, self.balancer_url] + self.individual_urls
+
 
 ##############################################
 # Video Info List
@@ -135,10 +136,8 @@ class VideoInfoList(ListBase):
             vid.make_rand_symlink()
 
     def update_google_sheet(self):
-        
-        
         # Format data string
-        header = ['dir_name', 'episode name', 'Valid?', 'COPY THIS']
+        header = ['Valid?', 'dir_name', 'episode name', 'COPY THIS']
         num_servers = 1+len(settings['slave-server-urls'])
         full_header = header + ['Direct Link']*num_servers
         width = len(full_header)
@@ -152,7 +151,16 @@ class VideoInfoList(ListBase):
         privateHeader = ['Randomized Links']*width
         privateHeader = [spacerline]*3 + [privateHeader]
 
-        values = [full_header] + [publicHeader] + publicCells + privateHeader + privateCells
+
+        #stats_header = ['STATS'] * width
+        stats = shutil.disk_usage('/')
+        used_str = 'Used %0.2f GB / %0.2f GB' % (stats.used/(2**30), stats.total/(2**30))
+        free_str = '%0.2f GB Remaining' % (stats.free/(2**30))
+        statline = ['', '', used_str, free_str]
+        # statline = statline + [''] * (width-len(x))
+        # statline = [x+['']*(width-len(x)) for x in statline]
+
+        values = [statline] + [full_header] + [publicHeader] + publicCells + privateHeader + privateCells
         
         # Get Creds and build service
         creds = service_account.Credentials.from_service_account_file(paths['google-api-credentials'], scopes=settings['google']['scopes'])
