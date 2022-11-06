@@ -58,13 +58,13 @@ class VideoInfo:
         if is_private:
             # Convert Extentions
             fn = self.orig_fn
-            ext = os.path.splitext(self.orig_fn)
+            ext = os.path.splitext(self.orig_fn)[1]
             if ext in settings['video-extentions']:
                 ext_settings = settings['video-extentions'][ext]
                 if ext_settings['convert']:
                     fn.replace(ext, ext_settings['converted_ext'])
             else:
-                valid_ext = False
+                self.valid_ext = False
             self.fn = fn
 
             # Gen rand path
@@ -87,6 +87,8 @@ class VideoInfo:
                 relDir = ''
 
             self.fn = self.orig_fn
+            
+            self.valid_ext = os.path.splitext(self.fn)[1] in settings['video-extentions']
             
             self.lower_url = os.path.join(settings['public-dirs']['public-videos'], relDir, urllib.parse.quote(self.fn))
             #self.url = os.path.join(settings['balancer-server-url'], settings['private-dirs']['private-videos'], relDir, urllib.parse.quote(self.fn))
@@ -215,6 +217,7 @@ class VideoInfoList(ListBase):
         dirs_to_copy = [paths['config'], paths['private-videos'], paths['public-videos']]
         remote_ssh_logins = ['%s@%s' % (settings['uname'], x) for x in settings['slave-server-urls']]
 
+        out_strings = []
         # Inteate through and make them all 
         for dir_path in dirs_to_copy:
             for remote_ssh_login in remote_ssh_logins:
@@ -227,4 +230,6 @@ class VideoInfoList(ListBase):
                         "%s:%s" % (remote_ssh_login, dir_path)
                 ]
                 output = subprocess.check_output(rsync_cmd)
-                print(output)
+                out_strings.append(output.decode('utf-8'))
+        
+        return '\n'.join(out_strings)
