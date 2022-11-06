@@ -211,12 +211,12 @@ class VideoInfoList(ListBase):
         for dir_path in dirs_to_copy:
             for remote_ssh_login in remote_ssh_logins:
                 
+
                 # make the cmd
                 rsync_cmd = ["rsync", "-av", "--itemize-changes", "--delete",
                         "-e", "ssh -p %s" % (settings['ssh-port']),
                         "%s/" % (dir_path),
                         "%s:%s" % (remote_ssh_login, dir_path)
                 ]
-                
                 output = subprocess.check_output(rsync_cmd)
                 print(output)

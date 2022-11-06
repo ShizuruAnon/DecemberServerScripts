@@ -29,7 +29,7 @@ def main():
     VideoInfoList.rsync_files_to_other_servers()
 
     # TODO: Update google sheets
-    updated_all_info = updated_private_info + current_private_info
+    updated_all_info = updated_private_info + current_public_info
     updated_all_info.update_google_sheet()
 
 if __name__ == '__main__':
