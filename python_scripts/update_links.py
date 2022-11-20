@@ -26,9 +26,9 @@ def main():
 
         # Get the unchanged and added video info. Then add them so the old links aren't all changed
         unchanged_private_info = VideoInfoList([x for x in old_private_info if x.orig_path not in removed_private_paths])
-        added_private_info = VideoInfoList([x for x in current_private_info if x.orig_path == added_private_paths])
+        added_private_info = VideoInfoList([x for x in current_private_info if x.orig_path in added_private_paths])
         updated_private_info = unchanged_private_info + added_private_info
-        
+
         # Update the sheets
         updated_all_info = updated_private_info + current_public_info
         updated_all_info.update_google_sheet()
@@ -38,8 +38,8 @@ def main():
         updated_private_info.rewrite_symlinks()
         output = VideoInfoList.rsync_files_to_other_servers()
 
-        print(output)
-        print('Finished Link Randomization')
+        #print(output)
+        print('Finished Link Update')
     except Exception as e:
         print('Error: Link Update didnt finish!!!')
         print('Exception was:')
